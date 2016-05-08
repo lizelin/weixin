@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dbs>
+	<db>
+		<name>wx</name>
+		<driverClassName>com.mysql.jdbc.Driver</driverClassName>
+		<initialSize>5</initialSize>
+		<maxActive>10</maxActive>
+		<maxIdle>5</maxIdle>
+		<minIdle>5</minIdle>
+		<maxWait>10000</maxWait>
+		<logAbandoned>true</logAbandoned>
+		<removeAbandoned>true</removeAbandoned>
+		<removeAbandonedTimeout>60</removeAbandonedTimeout>
+		<validationQuery>select now()</validationQuery>
+		<user>wxuser</user>
+		<password><![CDATA[Mynormal12#]]></password>
+		<url><![CDATA[jdbc:mysql://127.0.0.1:3306/wx?generateSimpleParameterMetadata=true&useUnicode=true&characterEncoding=utf8]]></url>
+	</db>
+	<db>
+		<name>wx1</name>
+		<driverClassName>com.mysql.jdbc.Driver</driverClassName>
+		<initialSize>5</initialSize>
+		<maxActive>10</maxActive>
+		<maxIdle>5</maxIdle>
+		<minIdle>5</minIdle>
+		<maxWait>10000</maxWait>
+		<logAbandoned>true</logAbandoned>
+		<removeAbandoned>true</removeAbandoned>
+		<removeAbandonedTimeout>60</removeAbandonedTimeout>
+		<validationQuery>select now()</validationQuery>
+		<user>wxuser</user>
+		<password><![CDATA[Mynormal12#]]></password>
+		<url><![CDATA[jdbc:mysql://127.0.0.1:3306/wx?generateSimpleParameterMetadata=true&useUnicode=true&characterEncoding=utf8]]></url>
+	</db>
+</dbs>

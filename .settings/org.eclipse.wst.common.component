@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="weixin">
+        <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/build/classes"/>
+        <wb-resource deploy-path="/WEB-INF/conf" source-path="/conf"/>
+        <dependent-module archiveName="linvx-java-common.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/linvx-java-common/linvx-java-common">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <property name="java-output-path" value="/weixin/build/classes"/>
+        <property name="context-root" value="wxnew"/>
+    </wb-module>
+</project-modules>
