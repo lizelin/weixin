@@ -2,16 +2,11 @@ package net.linvx.java.wx.api;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.io.Writer;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Formatter;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,6 +29,7 @@ import net.sf.json.JSONObject;
 
 /**
  * Api通用类，比如检查帐号、读取request流、http get／post，检查http response是否合法的xml或json等；
+ * 
  * @author lizelin
  *
  */
@@ -58,8 +54,8 @@ public class ApiUtils {
 			log.error("the request api uri [" + req.getRequestURI() + "] is not config in wx_official_account table");
 			return false;
 		}
-		if (MyStringUtils.isEmpty(account.vc2ApiToken)) {
-			log.error("the account [" + account.vc2AccountName
+		if (MyStringUtils.isEmpty(account.getVc2ApiToken())) {
+			log.error("the account [" + account.getVc2AccountName()
 					+ "] don't have apiToken config in wx_official_account table");
 			return false;
 		}
@@ -194,7 +190,6 @@ public class ApiUtils {
 		}
 	}
 
-
 	public static Element assertXml(String result) throws ApiException {
 		if (MyStringUtils.isEmpty(result))
 			throw new ApiException("unknown", "the response string is null!");
@@ -211,7 +206,8 @@ public class ApiUtils {
 		if (json == null) {
 			throw new ApiException("unknown", "the expect response string is json!");
 		}
-		if (MyStringUtils.isNotEmpty(json.optString(ApiUtils.ERRCODE)) && !"0".equals(json.optString(ApiUtils.ERRCODE))) {
+		if (MyStringUtils.isNotEmpty(json.optString(ApiUtils.ERRCODE))
+				&& !"0".equals(json.optString(ApiUtils.ERRCODE))) {
 			throw new ApiException(json.optString(ERRCODE), json.optString(ERRMSG));
 		}
 		return json;
@@ -259,25 +255,23 @@ public class ApiUtils {
 		String result = ApiUtils.post(url, data);
 		return assertXml(result);
 	}
-	
+
 	public static String byteToHex(final byte[] hash) {
-        Formatter formatter = new Formatter();
-        for (byte b : hash)
-        {
-            formatter.format("%02x", b);
-        }
-        String result = formatter.toString();
-        formatter.close();
-        return result;
-    }
+		Formatter formatter = new Formatter();
+		for (byte b : hash) {
+			formatter.format("%02x", b);
+		}
+		String result = formatter.toString();
+		formatter.close();
+		return result;
+	}
 
-    public static String create_nonce_str() {
-        return UUID.randomUUID().toString();
-    }
+	public static String create_nonce_str() {
+		return UUID.randomUUID().toString();
+	}
 
-    public static String create_timestamp() {
-        return Long.toString(System.currentTimeMillis() / 1000);
-    }
-    
-    
+	public static String create_timestamp() {
+		return Long.toString(System.currentTimeMillis() / 1000);
+	}
+
 }

@@ -13,7 +13,7 @@ import net.linvx.java.libs.db.MyDbHelper;
  *
  */
 public class DbHelper {
-	public static Connection getWxDb() throws SQLException{
+	public static Connection getWxDb() throws SQLException {
 		return MyDbHelper.getInstance().getConnection("wx");
 	}
 }

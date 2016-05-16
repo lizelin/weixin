@@ -19,10 +19,15 @@ import net.sf.json.JSONObject;
 /**
  * 微信api的入口servlet，包括调用微信服务器的api以及oauth2、jsapi参数获取等
  * 必须传入两个参数：accountCode：代表哪个公众号；cmdAct：代表请求的具体指令
+ * 
  * @author lizelin
  *
  */
 public class WeixinApiServlet extends HttpServlet {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7461167829576602905L;
 	private static Logger log = MyLog.getLogger(WeixinApiServlet.class);
 
 	@Override
@@ -38,7 +43,7 @@ public class WeixinApiServlet extends HttpServlet {
 			this.writeResp(resp, new ApiException("cmdAct param is must pass to this api servlet!").toString());
 			return;
 		}
-		
+
 		WeixinApiImpl api = WeixinApiImpl.createApiToWxByAccountCode(accountCode);
 		String reqData = ApiUtils.getRequestData(req);
 		log.info("request data: " + reqData);
@@ -54,7 +59,7 @@ public class WeixinApiServlet extends HttpServlet {
 			this.getTokenJson(req, resp, api, reqData);
 		} else if (cmdAct.equalsIgnoreCase(WeixinApiCmdAct.getTokenString.name())) {
 			this.getTokenString(req, resp, api, reqData);
-		}  else if (cmdAct.equalsIgnoreCase(WeixinApiCmdAct.getUserInfo.name())) {
+		} else if (cmdAct.equalsIgnoreCase(WeixinApiCmdAct.getUserInfo.name())) {
 			this.getUserInfo(req, resp, api, reqData);
 		} else if (cmdAct.equalsIgnoreCase(WeixinApiCmdAct.getMenus.name())) {
 			this.getMenus(req, resp, api, reqData);
@@ -72,10 +77,10 @@ public class WeixinApiServlet extends HttpServlet {
 			this.sendCustomTextMessage(req, resp, api, reqData);
 		} else if (cmdAct.equalsIgnoreCase(WeixinApiCmdAct.sendCustomNewMessage.name())) {
 			this.sendCustomNewMessage(req, resp, api, reqData);
-		}  else if (cmdAct.equalsIgnoreCase(WeixinApiCmdAct.sendTemplateMessage.name())) {
+		} else if (cmdAct.equalsIgnoreCase(WeixinApiCmdAct.sendTemplateMessage.name())) {
 			this.sendTemplateMessage(req, resp, api, reqData);
-		} 
-		
+		}
+
 	}
 
 	private void sendTemplateMessage(HttpServletRequest req, HttpServletResponse resp, WeixinApiImpl api,
@@ -92,7 +97,7 @@ public class WeixinApiServlet extends HttpServlet {
 		} catch (ApiException e) {
 			this.writeAndLogException(resp, e);
 			return;
-		} 
+		}
 	}
 
 	private void sendCustomNewMessage(HttpServletRequest req, HttpServletResponse resp, WeixinApiImpl api,
@@ -114,8 +119,8 @@ public class WeixinApiServlet extends HttpServlet {
 		} catch (ApiException e) {
 			this.writeAndLogException(resp, e);
 			return;
-		} 
-		
+		}
+
 	}
 
 	private void sendCustomTextMessage(HttpServletRequest req, HttpServletResponse resp, WeixinApiImpl api,
@@ -136,9 +141,8 @@ public class WeixinApiServlet extends HttpServlet {
 		} catch (ApiException e) {
 			this.writeAndLogException(resp, e);
 			return;
-		} 
-		
-		
+		}
+
 	}
 
 	private void jsapiSign(HttpServletRequest req, HttpServletResponse resp, WeixinApiImpl api, String reqData) {
@@ -153,7 +157,7 @@ public class WeixinApiServlet extends HttpServlet {
 		} catch (ApiException e) {
 			this.writeAndLogException(resp, e);
 			return;
-		} 
+		}
 	}
 
 	private void long2short(HttpServletRequest req, HttpServletResponse resp, WeixinApiImpl api, String reqData) {
@@ -172,23 +176,23 @@ public class WeixinApiServlet extends HttpServlet {
 			this.writeAndLogException(resp, e);
 			return;
 		}
-		
+
 	}
 
 	private void createTempQrCode(HttpServletRequest req, HttpServletResponse resp, WeixinApiImpl api, String reqData) {
 		String expire_seconds = MyStringUtils.nvlString(req.getParameter("expire_seconds"), "0");
-		
+
 		String scene_id = MyStringUtils.nvlString(req.getParameter("scene_id"), "0");
-		
+
 		int expire = 2592000, scene = 0;
-		if (Integer.parseInt(expire_seconds)>0 && Integer.parseInt(expire_seconds)<2592000)
-			 expire = Integer.parseInt(expire_seconds);
+		if (Integer.parseInt(expire_seconds) > 0 && Integer.parseInt(expire_seconds) < 2592000)
+			expire = Integer.parseInt(expire_seconds);
 		scene = Integer.parseInt(scene_id);
 		if (scene <= 0) {
 			this.writeAndLogException(resp, new ApiException("scene_id must > 0!"));
 			return;
 		}
-			
+
 		try {
 			String data = api.createTempQrCode(expire, scene).toString();
 			this.writeResp(resp, data);
@@ -198,9 +202,10 @@ public class WeixinApiServlet extends HttpServlet {
 		}
 	}
 
-	private void createLimitQrCode(HttpServletRequest req, HttpServletResponse resp, WeixinApiImpl api, String reqData) {
+	private void createLimitQrCode(HttpServletRequest req, HttpServletResponse resp, WeixinApiImpl api,
+			String reqData) {
 		String scene_id = MyStringUtils.nvlString(req.getParameter("scene_id"), "0");
-		
+
 		int scene = Integer.parseInt(scene_id);
 		if (scene <= 0 || scene > 100000) {
 			this.writeAndLogException(resp, new ApiException("scene_id must < 100000!"));
@@ -214,14 +219,14 @@ public class WeixinApiServlet extends HttpServlet {
 			return;
 		}
 	}
-	
+
 	private void createMenus(HttpServletRequest req, HttpServletResponse resp, WeixinApiImpl api, String reqData) {
 		if (MyStringUtils.isEmpty(reqData)) {
 			this.writeAndLogException(resp, new ApiException("reqData(is null) must pass to this api servlet!"));
 			return;
 		}
 		JSONObject json = JSONObject.fromObject(reqData);
-		if (json==null) {
+		if (json == null) {
 			this.writeAndLogException(resp, new ApiException("reqData(is not json) must pass to this api servlet!"));
 			return;
 		}
@@ -232,7 +237,7 @@ public class WeixinApiServlet extends HttpServlet {
 			return;
 		}
 		this.writeResp(resp, success);
-		
+
 	}
 
 	private void getMenus(HttpServletRequest req, HttpServletResponse resp, WeixinApiImpl api, String reqData) {
@@ -303,7 +308,7 @@ public class WeixinApiServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		doGet(req, resp);
 	}
-	
+
 	private void goOAuth2Proxy(HttpServletRequest req, HttpServletResponse resp, WeixinApiImpl api, String reqData) {
 		String receiveCodeUrl = req.getParameter("receiveCodeUrl");
 		if (MyStringUtils.isEmpty(receiveCodeUrl)) {
@@ -319,17 +324,19 @@ public class WeixinApiServlet extends HttpServlet {
 			log.error("", e);
 		}
 	}
-	
-	private void receiveOAuth2CodeProxy(HttpServletRequest req, HttpServletResponse resp, WeixinApiImpl api, String reqData) {
+
+	private void receiveOAuth2CodeProxy(HttpServletRequest req, HttpServletResponse resp, WeixinApiImpl api,
+			String reqData) {
 		String redirect_uri_proxy = req.getParameter("redirect_uri_proxy");
 		if (MyStringUtils.isEmpty(redirect_uri_proxy)) {
-			this.writeResp(resp, new ApiException("redirect_uri_proxy param is must pass to this api servlet!").toString());
+			this.writeResp(resp,
+					new ApiException("redirect_uri_proxy param is must pass to this api servlet!").toString());
 			return;
 		}
 		try {
 			String code = req.getParameter("code");
 			String state = req.getParameter("state");
-			//code=CODE&state=STATE
+			// code=CODE&state=STATE
 			redirect_uri_proxy = HttpUrl.addParam(redirect_uri_proxy, "code", code);
 			redirect_uri_proxy = HttpUrl.addParam(redirect_uri_proxy, "state", state);
 			log.info("redirect url is:" + redirect_uri_proxy);
@@ -339,8 +346,8 @@ public class WeixinApiServlet extends HttpServlet {
 			log.error("", e);
 		}
 	}
-	
-	private void getTokenJson(HttpServletRequest req, HttpServletResponse resp, WeixinApiImpl api, String reqData){
+
+	private void getTokenJson(HttpServletRequest req, HttpServletResponse resp, WeixinApiImpl api, String reqData) {
 		String jsonStr = "";
 		try {
 			jsonStr = api.getTokenJson();
@@ -352,8 +359,8 @@ public class WeixinApiServlet extends HttpServlet {
 		}
 		this.writeResp(resp, jsonStr);
 	}
-	
-	private void getTokenString(HttpServletRequest req, HttpServletResponse resp, WeixinApiImpl api, String reqData){
+
+	private void getTokenString(HttpServletRequest req, HttpServletResponse resp, WeixinApiImpl api, String reqData) {
 		String jsonStr = "";
 		try {
 			jsonStr = api.getTokenString();
@@ -370,12 +377,12 @@ public class WeixinApiServlet extends HttpServlet {
 		log.info("response data:" + data);
 		ApiUtils.writeResp(resp, data);
 	}
-	
+
 	private void writeAndLogException(HttpServletResponse resp, Exception e) {
 		e.printStackTrace();
 		log.error("", e);
 		this.writeResp(resp, e.toString());
 	}
-	
+
 	private static String success = new ApiException.ApiResult("0", "success").toJsonString();
 }

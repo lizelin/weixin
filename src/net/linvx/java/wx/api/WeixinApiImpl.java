@@ -7,7 +7,6 @@ import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,19 +16,17 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
-
 import net.linvx.java.libs.http.HttpUrl;
 import net.linvx.java.libs.tools.CommonAssistant;
 import net.linvx.java.libs.tools.MyLog;
-import net.linvx.java.libs.utils.MyDateUtils;
 import net.linvx.java.libs.utils.MyStringUtils;
 import net.linvx.java.wx.bo.BoOfficialAccount;
 import net.linvx.java.wx.common.Consts;
 import net.linvx.java.wx.common.DataProvider;
+import net.linvx.java.wx.model.JsapiTicket;
 import net.linvx.java.wx.model.Token;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-import net.linvx.java.wx.model.JsapiTicket;
 
 /**
  * 调用微信服务器api接口，比如获取token，拉取用户信息等
@@ -55,7 +52,7 @@ public class WeixinApiImpl {
 
 	private WeixinApiImpl(BoOfficialAccount _account) {
 		this.account = _account;
-		this.tokenFile = CommonAssistant.getResourceRootPath() + "/weixintoken_" + account.vc2AccountCode + ".txt";
+		this.tokenFile = CommonAssistant.getResourceRootPath() + "/weixintoken_" + account.getNumAccountGuid() + ".txt";
 	}
 
 	public static WeixinApiImpl createApiToWxByAccountCode(String accountCode) {
@@ -73,7 +70,7 @@ public class WeixinApiImpl {
 	 * @throws ApiException
 	 */
 	public Token getToken() throws ApiException {
-		String accountCode = account.vc2AccountCode;
+		String accountCode = account.getVc2AccountCode();
 		if (tokens.containsKey(accountCode) && !tokens.get(accountCode).isExpired())
 			return tokens.get(accountCode);
 
@@ -81,8 +78,8 @@ public class WeixinApiImpl {
 		if (token != null && !token.isExpired()) {
 			return token;
 		}
-		String api = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" + account.vc2AppId
-				+ "&secret=" + account.vc2AppSecret;
+		String api = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid="
+				+ account.getVc2AppId() + "&secret=" + account.getVc2AppSecret();
 		JSONObject json = ApiUtils.httpGetJson(api);
 		token = new Token(json.optString("access_token"), json.optInt("expires_in"));
 		tokens.put(accountCode, token);
@@ -173,8 +170,8 @@ public class WeixinApiImpl {
 	 * @throws ApiException
 	 */
 	public JSONObject getOpenIdByOAuth2Code(String code) throws ApiException {
-		String api = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=" + account.vc2AppId + "&secret="
-				+ account.vc2AppSecret + "&code=" + code + "&grant_type=authorization_code";
+		String api = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=" + account.getVc2AppId() + "&secret="
+				+ account.getVc2AppSecret() + "&code=" + code + "&grant_type=authorization_code";
 		return ApiUtils.httpGetJson(api);
 	}
 
@@ -188,7 +185,7 @@ public class WeixinApiImpl {
 	public String getOAuth2UrlProxy(HttpServletRequest req, String receiveCodeUrl) {
 		String temp = "";
 		try {
-			temp = new HttpUrl(req).getSchemaHostPortPath() + "?accountCode=" + account.vc2AccountCode + "&cmdAct="
+			temp = new HttpUrl(req).getSchemaHostPortPath() + "?accountCode=" + account.getVc2AccountCode() + "&cmdAct="
 					+ WeixinApiCmdAct.receiveOAuth2CodeProxy.name() + "&redirect_uri_proxy="
 					+ URLEncoder.encode(receiveCodeUrl, Consts.DEFAULT_ENCODING);
 			temp = URLEncoder.encode(temp, Consts.DEFAULT_ENCODING);
@@ -197,8 +194,8 @@ public class WeixinApiImpl {
 			e.printStackTrace();
 		}
 
-		return "https://open.weixin.qq.com/connect/oauth2/authorize" + "?appid=" + account.vc2AppId + "&redirect_uri="
-				+ temp + "&response_type=code&scope=snsapi_base" + "&state=go#wechat_redirect";
+		return "https://open.weixin.qq.com/connect/oauth2/authorize" + "?appid=" + account.getVc2AppId()
+				+ "&redirect_uri=" + temp + "&response_type=code&scope=snsapi_base" + "&state=go#wechat_redirect";
 	}
 
 	/**
@@ -209,7 +206,7 @@ public class WeixinApiImpl {
 	 * @return
 	 */
 	public String getOAuth2Url(HttpServletRequest req, String receiveCodeUrl) {
-		String authDomains = account.vc2JsApiDomain;
+		String authDomains = account.getVc2JsApiDomain();
 		if (MyStringUtils.isEmpty(authDomains))
 			return "";
 		List<String> domains = Arrays.asList(authDomains.split(","));
@@ -221,7 +218,7 @@ public class WeixinApiImpl {
 		try {
 			if (isAuthDomain) {
 				redirectUri = URLEncoder.encode(receiveCodeUrl, Consts.DEFAULT_ENCODING);
-				return "https://open.weixin.qq.com/connect/oauth2/authorize" + "?appid=" + account.vc2AppId
+				return "https://open.weixin.qq.com/connect/oauth2/authorize" + "?appid=" + account.getVc2AppId()
 						+ "&redirect_uri=" + redirectUri + "&response_type=code&scope=snsapi_base"
 						+ "&state=go#wechat_redirect";
 			} else {
@@ -313,20 +310,18 @@ public class WeixinApiImpl {
 	public String getJsapiTicket() throws ApiException {
 		if (jsapiTicket != null && jsapiTicket.validate())
 			return jsapiTicket.getTicket();
-		
+
 		return getJsapiTicketSyn();
 	}
-	
+
 	private synchronized String getJsapiTicketSyn() throws ApiException {
-		String url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token="+this.getTokenString()+"&type=jsapi";
+		String url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=" + this.getTokenString()
+				+ "&type=jsapi";
 		JSONObject jsonObject = ApiUtils.httpGetJson(url);
 		/**
-		 * {
-		 * "errcode":0,
-		 * "errmsg":"ok",
-		 * "ticket":"bxLdikRXVbTPdHSM05e5u5sUoXNKd8-41ZO3MhKoyN5OfkWITDGgnr2fwJ0m9E8NYzWKVZvdVtaUgWvsdshFKA",
-		 * "expires_in":7200
-		 * }
+		 * { "errcode":0, "errmsg":"ok", "ticket":
+		 * "bxLdikRXVbTPdHSM05e5u5sUoXNKd8-41ZO3MhKoyN5OfkWITDGgnr2fwJ0m9E8NYzWKVZvdVtaUgWvsdshFKA",
+		 * "expires_in":7200 }
 		 */
 		if (!jsonObject.containsKey("ticket")) {
 			throw new ApiException("返回结果有错误，不包含key值：ticket");
@@ -340,8 +335,9 @@ public class WeixinApiImpl {
 		jsapiTicket.setUpdateTime(System.currentTimeMillis());
 		return ticket;
 	}
+
 	private net.linvx.java.wx.model.JsapiTicket jsapiTicket = null;
-	
+
 	public JSONObject jsapiSign(String url) throws ApiException {
 		String jsapi_ticket = this.getJsapiTicket();
 		Map<String, String> ret = new HashMap<String, String>();
@@ -370,12 +366,12 @@ public class WeixinApiImpl {
 		ret.put("nonceStr", nonce_str);
 		ret.put("timestamp", timestamp);
 		ret.put("signature", signature);
-		ret.put("appid", this.getAccount().vc2AppId);
+		ret.put("appid", this.getAccount().getVc2AppId());
 		return net.sf.json.JSONObject.fromObject(ret);
 	}
 
 	public String sendCustomTextMessage(String toUser, String msg) throws ApiException {
-		String url = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token="+this.getTokenString();
+		String url = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=" + this.getTokenString();
 		JSONObject json = new JSONObject();
 		json.put("touser", toUser);
 		json.put("msgtype", "text");
@@ -388,7 +384,7 @@ public class WeixinApiImpl {
 	}
 
 	public String sendCustomNewsMessage(String toUser, JSONArray articles) throws ApiException {
-		String url = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token="+this.getTokenString();
+		String url = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=" + this.getTokenString();
 		JSONObject json = new JSONObject();
 		json.put("touser", toUser);
 		json.put("msgtype", "news");
@@ -396,14 +392,14 @@ public class WeixinApiImpl {
 		jsonContent.put("articles", articles);
 		json.put("news", jsonContent);
 		String data = json.toString();
-		JSONObject ret = ApiUtils.httpPostJson(url, data);	
+		JSONObject ret = ApiUtils.httpPostJson(url, data);
 		return ret.toString();
 	}
-	
+
 	public String sendTemplateMessage(JSONObject jsonData) throws ApiException {
 		// TODO Auto-generated method stub
-		String url = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token="+this.getTokenString();
-		String toUser = jsonData.getString("touser");
+		String url = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=" + this.getTokenString();
+//		String toUser = jsonData.getString("touser");
 		String data = jsonData.toString();
 		JSONObject json = ApiUtils.httpPostJson(url, data);
 		return json.toString();

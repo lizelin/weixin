@@ -11,7 +11,6 @@ import javax.servlet.ServletContextListener;
 
 import org.apache.log4j.Logger;
 
-import net.linvx.java.libs.tools.CommonAssistant;
 import net.linvx.java.libs.tools.MyLog;
 
 /**
@@ -23,32 +22,39 @@ public class ProjectTask implements ServletContextListener {
 	// 定时器
 	private Timer timer;
 
-	/* (non-Javadoc)
-	 * @see javax.servlet.ServletContextListener#contextDestroyed(javax.servlet.ServletContextEvent)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see javax.servlet.ServletContextListener#contextDestroyed(javax.servlet.
+	 * ServletContextEvent)
 	 */
 	@Override
 	public void contextDestroyed(ServletContextEvent arg0) {
 		timer.cancel();// 定时器销毁
 	}
 
-	/* (non-Javadoc)
-	 * @see javax.servlet.ServletContextListener#contextInitialized(javax.servlet.ServletContextEvent)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * javax.servlet.ServletContextListener#contextInitialized(javax.servlet.
+	 * ServletContextEvent)
 	 */
 	@Override
 	public void contextInitialized(ServletContextEvent arg0) {
 		log.info("ProjectTask.contextInitialized execute!");
 		timer = new Timer(true);
-		//timer.schedule(new FansInfoUpdateTask(), 300 * 1000);
+		// timer.schedule(new FansInfoUpdateTask(), 300 * 1000);
 		timer.schedule(new NormalTask(), 60 * 1000);
 
 	}
 
-	class NormalTask extends TimerTask{
+	class NormalTask extends TimerTask {
 
 		@Override
 		public void run() {
-			
+
 		}
-		
+
 	}
 }

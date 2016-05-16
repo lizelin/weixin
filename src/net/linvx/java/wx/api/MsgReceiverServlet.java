@@ -20,31 +20,32 @@ import net.linvx.java.wx.common.DataProvider;
 
 /**
  * 接收微信服务器推送的消息的总入口
+ * 
  * @author lizelin
  *
  */
 public class MsgReceiverServlet extends javax.servlet.http.HttpServlet {
-	
+
 	private static final long serialVersionUID = 799971996100904594L;
 	private static final Logger log = MyLog.getLogger(MsgReceiverServlet.class);
-	
+
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		BoOfficialAccount account = DataProvider.getWxOfficialAccountByApiUrl(req.getRequestURI());
 		// 检查服务号配置信息
 		if (!ApiUtils.checkOfficialAccount(req, account))
 			return;
-		
+
 		// 检查签名
-		if (!ApiUtils.checkSignOfMsgFromWx(req, account.vc2ApiToken))
+		if (!ApiUtils.checkSignOfMsgFromWx(req, account.getVc2ApiToken()))
 			return;
-		
+
 		// 处理微信服务器apiurl验证信息, 直接返回echostr，代表接口url有效
-		if (MyStringUtils.isNotEmpty(req.getParameter("echostr"))){
+		if (MyStringUtils.isNotEmpty(req.getParameter("echostr"))) {
 			ApiUtils.writeResp(resp, req.getParameter("echostr"));
 			return;
 		}
-		
+
 		/**
 		 * 获取post数据
 		 */
@@ -55,7 +56,7 @@ public class MsgReceiverServlet extends javax.servlet.http.HttpServlet {
 		}
 		log.info("request uri is :" + new HttpUrl(req).getUrlString());
 		log.info(reqData);
-		
+
 		/**
 		 * 解析xml；
 		 */
@@ -64,8 +65,8 @@ public class MsgReceiverServlet extends javax.servlet.http.HttpServlet {
 			log.error("request xml is null");
 			return;
 		}
-		
-		//处理消息
+
+		// 处理消息
 		ProcessReceivedMsg pm = new ProcessReceivedMsg(account, rootElt);
 		try {
 			pm.process();
@@ -74,15 +75,15 @@ public class MsgReceiverServlet extends javax.servlet.http.HttpServlet {
 			log.error("ProcessReceivedMsg.process error: ", e);
 		}
 		String reply = pm.getReplyData();
-		
-		//如果回复为空，则直接回复success
+
+		// 如果回复为空，则直接回复success
 		if (MyStringUtils.isEmpty(reply)) {
 			log.error("reply data is null and set reply = success");
 			reply = "success";
 		}
-		
+
 		log.info("response is : \n" + reply);
-		
+
 		// 返回消息处理结果
 		ApiUtils.writeResp(resp, reply);
 
@@ -94,5 +95,4 @@ public class MsgReceiverServlet extends javax.servlet.http.HttpServlet {
 		doGet(req, resp);
 	}
 
-	
 }
