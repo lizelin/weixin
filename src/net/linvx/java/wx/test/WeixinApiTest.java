@@ -53,41 +53,45 @@ public class WeixinApiTest {
 		WeixinApiTest apiTest = new WeixinApiTest("CODE");
 		WeixinApiImpl api = apiTest.getApiInstance();
 		int index = 1;
-		System.out.println("test " + index++ +":");
-		System.out.println(api.getTokenString());
-		
-		System.out.println("test " + index++ +":");
-		System.out.println(api.getUserInfo("owJ2MjibJT9j6VqKTsFe4x29gOhY"));
-		
-		System.out.println("test " + index++ +":");
-		System.out.println(api.createMenus(apiTest.getMenuJson()));
-		
-		System.out.println("test " + index++ +":");
-		JSONObject menus = api.getMenus();
-		System.out.println(menus.toString());
-		
-		System.out.println("test " + index++ +": 保存菜单");
-		Menu[] marrs = BoProcessor.parseMenuJson(menus);
-		if (marrs!=null && marrs.length>0) {
-			marrs[0].setUrl(MyDateUtils.getTimeStamp());;
-		}
-		DataProvider.saveMenus(marrs, api.getAccount().getNumAccountGuid());
-		
-		System.out.println("test " + index++ +": 加载菜单");
-		JSONObject json = BoProcessor.toMenuJson(DataProvider.loadMenus(api.getAccount().getNumAccountGuid()));
-		
-		api.createMenus(json);
-		menus = api.getMenus();
-		marrs = BoProcessor.parseMenuJson(menus);
-		DataProvider.saveMenus(marrs, api.getAccount().getNumAccountGuid());
-		
-		System.out.println(api.createTempQrCode(600, 100001));
-		
-		System.out.println(api.createLimitQrCode(1));
-		
-		System.out.println("test " + index++ +": 发送客服消息");
-		api.sendCustomTextMessage("owJ2MjibJT9j6VqKTsFe4x29gOhY", "hello li");
-		System.out.println();
+//		System.out.println("test " + index++ +":");
+//		System.out.println(api.getTokenString());
+//		
+//		System.out.println("test " + index++ +":");
+//		System.out.println(api.getUserInfo("owJ2MjibJT9j6VqKTsFe4x29gOhY"));
+//		
+//		System.out.println("test " + index++ +":");
+//		System.out.println(api.createMenus(apiTest.getMenuJson().toString()));
+//		
+//		System.out.println("test " + index++ +":");
+//		JSONObject menus = JSONObject.fromObject(api.getMenus());
+//		System.out.println(menus.toString());
+//		
+//		System.out.println("test " + index++ +": 保存菜单");
+//		Menu[] marrs = BoProcessor.parseMenuJson(menus);
+//		if (marrs!=null && marrs.length>0) {
+//			marrs[0].setUrl(MyDateUtils.getTimeStamp());;
+//		}
+//		DataProvider.saveMenus(marrs, api.getAccount().getNumAccountGuid());
+//		
+//		System.out.println("test " + index++ +": 加载菜单");
+//		JSONObject json = BoProcessor.toMenuJson(DataProvider.loadMenus(api.getAccount().getNumAccountGuid()));
+//		
+//		api.createMenus(json.toString());
+//		menus = JSONObject.fromObject(api.getMenus());
+//		marrs = BoProcessor.parseMenuJson(menus);
+//		DataProvider.saveMenus(marrs, api.getAccount().getNumAccountGuid());
+//		
+//		System.out.println(api.createTempQrCode(600, 100001));
+//		
+//		System.out.println(api.createLimitQrCode(1));
+//		
+//		System.out.println("test " + index++ +": 发送客服消息");
+//		api.sendCustomTextMessage("owJ2MjibJT9j6VqKTsFe4x29gOhY", "hello li");
+//		System.out.println();
+		System.out.println("test " + index++ +": jsapi 签名");
+		System.out.println(api.getJsapiTicket());
+		System.out.println(api.getJsapiTicket());
+		System.out.println(api.jsapiSign("www.sina.com"));
 	}
 	
 }

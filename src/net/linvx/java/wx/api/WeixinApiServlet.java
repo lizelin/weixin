@@ -24,12 +24,15 @@ import net.sf.json.JSONObject;
  *
  */
 public class WeixinApiServlet extends HttpServlet {
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 7461167829576602905L;
 	private static Logger log = MyLog.getLogger(WeixinApiServlet.class);
-
+	
+	/**
+	 * 执行成功时返回的json字符串：{"errcode":"0", errmsg:"ok"}
+	 */
+	private static String success = new ApiException.ApiResult("0", "success").toJsonString();
+	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		log.info("request url: " + new HttpUrl(req).getUrlString());
@@ -76,7 +79,7 @@ public class WeixinApiServlet extends HttpServlet {
 		} else if (cmdAct.equalsIgnoreCase(WeixinApiCmdAct.sendCustomTextMessage.name())) {
 			this.sendCustomTextMessage(req, resp, api, reqData);
 		} else if (cmdAct.equalsIgnoreCase(WeixinApiCmdAct.sendCustomNewMessage.name())) {
-			this.sendCustomNewMessage(req, resp, api, reqData);
+			this.sendCustomNewsMessage(req, resp, api, reqData);
 		} else if (cmdAct.equalsIgnoreCase(WeixinApiCmdAct.sendTemplateMessage.name())) {
 			this.sendTemplateMessage(req, resp, api, reqData);
 		}
@@ -92,7 +95,7 @@ public class WeixinApiServlet extends HttpServlet {
 		}
 		JSONObject json = JSONObject.fromObject(msg);
 		try {
-			String data = api.sendTemplateMessage(json);
+			String data = api.sendTemplateMessage(json.toString());
 			this.writeResp(resp, data);
 		} catch (ApiException e) {
 			this.writeAndLogException(resp, e);
@@ -100,7 +103,7 @@ public class WeixinApiServlet extends HttpServlet {
 		}
 	}
 
-	private void sendCustomNewMessage(HttpServletRequest req, HttpServletResponse resp, WeixinApiImpl api,
+	private void sendCustomNewsMessage(HttpServletRequest req, HttpServletResponse resp, WeixinApiImpl api,
 			String reqData) {
 		String toUser = req.getParameter("toUser");
 		if (MyStringUtils.isEmpty(toUser)) {
@@ -231,7 +234,7 @@ public class WeixinApiServlet extends HttpServlet {
 			return;
 		}
 		try {
-			api.createMenus(json);
+			api.createMenus(json.toString());
 		} catch (ApiException e) {
 			this.writeAndLogException(resp, e);
 			return;
@@ -384,5 +387,5 @@ public class WeixinApiServlet extends HttpServlet {
 		this.writeResp(resp, e.toString());
 	}
 
-	private static String success = new ApiException.ApiResult("0", "success").toJsonString();
+	
 }
