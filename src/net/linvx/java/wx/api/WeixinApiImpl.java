@@ -649,9 +649,7 @@ public class WeixinApiImpl {
 	 * @throws ApiException
 	 */
 	public String sendTemplateMessage(String jsonData) throws ApiException {
-		// TODO Auto-generated method stub
 		String url = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=" + this.getTokenString();
-		// String toUser = jsonData.getString("touser");
 		JSONObject json = ApiUtils.httpPostJson(url, jsonData);
 		return json.toString();
 	}
