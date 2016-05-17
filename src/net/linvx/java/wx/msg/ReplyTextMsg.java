@@ -5,8 +5,8 @@ import java.util.regex.Pattern;
 
 import net.linvx.java.libs.utils.MyStringUtils;
 
-public class TextMsg extends BaseMsg {
-	public TextMsg(int accountGuid, String fromUserName, String toUserName) {
+public class ReplyTextMsg extends ReplyMsgBase {
+	public ReplyTextMsg(int accountGuid, String fromUserName, String toUserName) {
 		super(accountGuid, fromUserName, toUserName);
 	}
 
@@ -16,7 +16,7 @@ public class TextMsg extends BaseMsg {
 		return content;
 	}
 
-	public TextMsg setContent(String content) {
+	public ReplyTextMsg setContent(String content) {
 		this.content = content;
 		return this;
 	}

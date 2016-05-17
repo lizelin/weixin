@@ -2,13 +2,13 @@ package net.linvx.java.wx.msg;
 
 import java.util.Date;
 
-public abstract class BaseMsg {
+public abstract class ReplyMsgBase {
 	private int accountGuid;
 	private String fromUserName;
 	private String toUserName;
 	private long createTime;
 	
-	public BaseMsg(int accountGuid, String fromUserName, String toUserName) {
+	public ReplyMsgBase(int accountGuid, String fromUserName, String toUserName) {
 		super();
 		this.accountGuid = accountGuid;
 		this.fromUserName = fromUserName;

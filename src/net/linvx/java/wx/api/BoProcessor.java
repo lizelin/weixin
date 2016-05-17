@@ -22,7 +22,7 @@ import net.sf.json.JSONObject;
  * @author lizelin
  *
  */
-public class DaoProcessor {
+public class BoProcessor {
 	/**
 	 * 根据微信传来的xml，生成消息
 	 * 
@@ -98,7 +98,7 @@ public class DaoProcessor {
 	 * 
 	 * @param numAccountGuid
 	 * @param openid
-	 * @param json
+	 * @param json		从微信获取的用户信息
 	 * @param isNewuser
 	 * @param sceneId
 	 * @return

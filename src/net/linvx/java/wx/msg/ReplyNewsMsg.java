@@ -5,8 +5,8 @@ import java.util.List;
 import net.linvx.java.libs.utils.MyStringUtils;
 
 
-public class NewsMsg extends BaseMsg{
-	public NewsMsg(int accountGuid, String fromUserName, String toUserName) {
+public class ReplyNewsMsg extends ReplyMsgBase{
+	public ReplyNewsMsg(int accountGuid, String fromUserName, String toUserName) {
 		super(accountGuid, fromUserName, toUserName);
 	}
 

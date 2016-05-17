@@ -6,23 +6,23 @@ import net.linvx.java.libs.utils.MyStringUtils;
 import net.linvx.java.wx.bo.BoOfficialAccount;
 import net.linvx.java.wx.bo.BoReceivedMsg;
 
-public class MsgUtils {
+public class ReplyMsgUtils {
 
-	public static BaseMsg createTextMsg(final BoOfficialAccount account, final BoReceivedMsg recvMsg,
+	public static ReplyMsgBase createTextMsg(final BoOfficialAccount account, final BoReceivedMsg recvMsg,
 			final String content) {
-		BaseMsg replyMsg = new TextMsg(account.getNumAccountGuid(), recvMsg.getVc2ToUserName(),
+		ReplyMsgBase replyMsg = new ReplyTextMsg(account.getNumAccountGuid(), recvMsg.getVc2ToUserName(),
 				recvMsg.getVc2FromUserName()).setContent(content);
 		recvMsg.setVc2ReplyMsg(replyMsg.getCompleteMsgData());
 		recvMsg.setDatReply(new Timestamp(System.currentTimeMillis()));
 		return replyMsg;
 	}
 
-	public static BaseMsg createWelcomeTextMsg(final BoOfficialAccount account, final BoReceivedMsg recvMsg) {
-		// BaseMsg replyMsg = new TextMsg(account.numAccountGuid,
+	public static ReplyMsgBase createWelcomeTextMsg(final BoOfficialAccount account, final BoReceivedMsg recvMsg) {
+		// ReplyMsgBase replyMsg = new ReplyTextMsg(account.numAccountGuid,
 		// recvMsg.vc2ToUserName, recvMsg.vc2FromUserName)
 		// .setContent("Welcome to wx!");
 		// return replyMsg;
-		return MsgUtils.createTextMsg(account, recvMsg, "Welcome to wx!");
+		return ReplyMsgUtils.createTextMsg(account, recvMsg, "Welcome to wx!");
 	}
 
 	/**
@@ -52,7 +52,7 @@ public class MsgUtils {
 	}
 
 	public static boolean isNeedReply(BoReceivedMsg msg) {
-		return !MsgUtils.isEventMsg(msg) || (MsgUtils.isEventMsg(msg)
+		return !ReplyMsgUtils.isEventMsg(msg) || (ReplyMsgUtils.isEventMsg(msg)
 				&& (MsgEnums.EventType.CLICK.name().equalsIgnoreCase(msg.attrs.get("Event"))
 						|| MsgEnums.EventType.SCAN.name().equalsIgnoreCase(msg.attrs.get("Event"))
 						|| MsgEnums.EventType.subscribe.name().equalsIgnoreCase(msg.attrs.get("Event"))));

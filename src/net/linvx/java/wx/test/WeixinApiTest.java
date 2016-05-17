@@ -2,7 +2,7 @@ package net.linvx.java.wx.test;
 
 import net.linvx.java.libs.utils.MyDateUtils;
 import net.linvx.java.wx.api.ApiException;
-import net.linvx.java.wx.api.DaoProcessor;
+import net.linvx.java.wx.api.BoProcessor;
 import net.linvx.java.wx.api.WeixinApiImpl;
 import net.linvx.java.wx.common.DataProvider;
 import net.linvx.java.wx.model.Menu;
@@ -67,18 +67,18 @@ public class WeixinApiTest {
 		System.out.println(menus.toString());
 		
 		System.out.println("test " + index++ +": 保存菜单");
-		Menu[] marrs = DaoProcessor.parseMenuJson(menus);
+		Menu[] marrs = BoProcessor.parseMenuJson(menus);
 		if (marrs!=null && marrs.length>0) {
 			marrs[0].setUrl(MyDateUtils.getTimeStamp());;
 		}
 		DataProvider.saveMenus(marrs, api.getAccount().getNumAccountGuid());
 		
 		System.out.println("test " + index++ +": 加载菜单");
-		JSONObject json = DaoProcessor.toMenuJson(DataProvider.loadMenus(api.getAccount().getNumAccountGuid()));
+		JSONObject json = BoProcessor.toMenuJson(DataProvider.loadMenus(api.getAccount().getNumAccountGuid()));
 		
 		api.createMenus(json);
 		menus = api.getMenus();
-		marrs = DaoProcessor.parseMenuJson(menus);
+		marrs = BoProcessor.parseMenuJson(menus);
 		DataProvider.saveMenus(marrs, api.getAccount().getNumAccountGuid());
 		
 		System.out.println(api.createTempQrCode(600, 100001));
