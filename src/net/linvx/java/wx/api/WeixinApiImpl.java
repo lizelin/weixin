@@ -211,17 +211,17 @@ public class WeixinApiImpl {
 	 * @param req
 	 * @param receiveCodeUrl
 	 * @return
+	 * @throws UnsupportedEncodingException 
 	 */
-	public String getOAuth2UrlProxy(HttpServletRequest req, String receiveCodeUrl) {
+	public String getOAuth2UrlProxy(HttpServletRequest req, String receiveCodeUrl) throws UnsupportedEncodingException {
 		String temp = "";
 		try {
-			temp = new HttpUrl(req).getSchemaHostPortPath() + "?accountCode=" + account.getVc2AccountCode() + "&cmdAct="
-					+ WeixinApiCmdAct.receiveOAuth2CodeProxy.name() + "&redirect_uri_proxy="
+			temp = new HttpUrl(req).getSchemaHostPort() + req.getContextPath() + "/oauth/r.jsp?accountCode=" + account.getVc2AccountCode() 
+					+ "&redirect_uri_proxy="
 					+ URLEncoder.encode(receiveCodeUrl, Consts.DEFAULT_ENCODING);
 			temp = URLEncoder.encode(temp, Consts.DEFAULT_ENCODING);
 		} catch (UnsupportedEncodingException e) {
-			log.error("", e);
-			e.printStackTrace();
+			throw e;
 		}
 
 		return "https://open.weixin.qq.com/connect/oauth2/authorize" + "?appid=" + account.getVc2AppId()
@@ -234,8 +234,9 @@ public class WeixinApiImpl {
 	 * @param req
 	 * @param receiveCodeUrl
 	 * @return
+	 * @throws UnsupportedEncodingException 
 	 */
-	public String getOAuth2Url(HttpServletRequest req, String receiveCodeUrl) {
+	public String getOAuth2Url(HttpServletRequest req, String receiveCodeUrl) throws UnsupportedEncodingException {
 		String authDomains = account.getVc2JsApiDomain();
 		if (MyStringUtils.isEmpty(authDomains))
 			return "";
@@ -255,10 +256,8 @@ public class WeixinApiImpl {
 				return this.getOAuth2UrlProxy(req, receiveCodeUrl);
 			}
 		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-			log.error("", e);
+			throw e;
 		}
-		return "";
 	}
 
 	/**

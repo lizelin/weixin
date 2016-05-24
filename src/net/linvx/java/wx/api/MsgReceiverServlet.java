@@ -20,7 +20,7 @@ import net.linvx.java.wx.common.DataProvider;
 
 /**
  * 接收微信服务器推送的消息的总入口
- * 
+ * /api/r.do
  * @author lizelin
  *
  */
