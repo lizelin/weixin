@@ -71,6 +71,9 @@ public class ProcessReceivedMsg {
 		return this;
 	}
 
+	/**
+	 * 处理取消关注消息
+	 */
 	private void processUnSubscribeMsg() {
 		BoWeixinUser user1 = DataProvider.getWxUserByOpenId(account.getNumAccountGuid(), recvMsg.getVc2FromUserName());
 		boolean isNewUser = (user1 == null);
@@ -82,6 +85,10 @@ public class ProcessReceivedMsg {
 		DataProvider.logUserSubOrUnSub(user1.getNumUserGuid(), "UNSUB", "");
 	}
 
+	/**
+	 * 处理关注消息
+	 * @throws ApiException
+	 */
 	private void processSubscribeMsg() throws ApiException {
 		BoWeixinUser user1 = DataProvider.getWxUserByOpenId(account.getNumAccountGuid(), recvMsg.getVc2FromUserName());
 		boolean isNewUser = (user1 == null);
@@ -105,6 +112,10 @@ public class ProcessReceivedMsg {
 		DataProvider.saveWxReceivedMsg(recvMsg);
 	}
 
+	/**
+	 * 回复给用户的消息字符串
+	 * @return
+	 */
 	public String getReplyData() {
 		if (recvMsg == null || MyStringUtils.isEmpty(recvMsg.getVc2ReplyMsg()))
 			return null;
