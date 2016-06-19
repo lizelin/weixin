@@ -8,11 +8,13 @@ import java.util.Map;
 import org.dom4j.Element;
 
 import net.linvx.java.libs.utils.MyStringUtils;
-import net.linvx.java.wx.bo.BoOfficialAccount;
-import net.linvx.java.wx.bo.BoReceivedMsg;
-import net.linvx.java.wx.bo.BoWeixinUser;
+import net.linvx.java.wx.common.CommonUtils;
 import net.linvx.java.wx.common.DataProvider;
 import net.linvx.java.wx.model.Menu;
+import net.linvx.java.wx.po.PoOfficialAccount;
+import net.linvx.java.wx.po.PoReceivedMsg;
+import net.linvx.java.wx.po.PoWeixinUser;
+import net.linvx.java.wx.po.PoWxUserStatus;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -30,8 +32,8 @@ public class BoProcessor {
 	 * @param rootElt
 	 * @return
 	 */
-	public static BoReceivedMsg createReceivedMsgBo(BoOfficialAccount account, Element rootElt) {
-		BoReceivedMsg recvMsg = new BoReceivedMsg();
+	public static PoReceivedMsg createReceivedMsgPo(PoOfficialAccount account, Element rootElt) {
+		PoReceivedMsg recvMsg = new PoReceivedMsg();
 		recvMsg.setDatReceive(new Timestamp(System.currentTimeMillis()));
 		recvMsg.setDatReply(null);
 		recvMsg.setNumAccountGuid(account.getNumAccountGuid());
@@ -72,7 +74,28 @@ public class BoProcessor {
 		msgAttr.put("SkuInfo", rootElt.elementText("SkuInfo"));
 		return recvMsg;
 	}
+	
+	
 
+	public static PoWxUserStatus createSubscribeWxUserStatusPo(int numAccountGuid, String openId) {
+		Timestamp now = CommonUtils.now();
+		PoWxUserStatus user = new PoWxUserStatus();
+		user.setDatCreation(now)
+			.setDatFirstSubscribeTime(now)
+			.setDatLastSubscribeTime(now)
+			.setDatLastUnSubscribeTime(null)
+			.setDatLastUpdate(now)
+			.setNumAccountGuid(Integer.valueOf(numAccountGuid))
+			.setNumUserGuid(0)
+			.setVc2EnabledFlag("Y")
+			.setVc2FirstQRSceneId(null)
+			.setVc2OpenId(openId)
+			.setVc2SubscribeFlag("1");
+		
+		return user;
+	}
+	
+	
 	/**
 	 * 创建新微信用户bo，主要是openid字段
 	 * 
@@ -80,8 +103,9 @@ public class BoProcessor {
 	 * @param openId
 	 * @return
 	 */
-	public static BoWeixinUser createNewWxUserBo(int numAccountGuid, String openId) {
-		BoWeixinUser user1 = new BoWeixinUser();
+	public static PoWeixinUser createNewWxUserBo(int numAccountGuid, String openId) {
+		
+		PoWeixinUser user1 = new PoWeixinUser();
 		user1.setDatCreation(new Timestamp(System.currentTimeMillis()));
 		user1.setDatLastUpdate(new Timestamp(System.currentTimeMillis()));
 		user1.setNumAccountGuid(numAccountGuid);
@@ -103,9 +127,9 @@ public class BoProcessor {
 	 * @param sceneId
 	 * @return
 	 */
-	public static BoWeixinUser getUpdateUserInfoBo(int numAccountGuid, String openid, JSONObject json,
+	public static PoWeixinUser getUpdateUserInfoBo(int numAccountGuid, String openid, JSONObject json,
 			boolean isNewuser, String sceneId) {
-		BoWeixinUser user = DataProvider.getWxUserByOpenId(numAccountGuid, openid);
+		PoWeixinUser user = DataProvider.getWxUserByOpenId(numAccountGuid, openid);
 		if (user == null)
 			return null;
 		user.setVc2SubscribeFlag(json.optString("subscribe", "0"));

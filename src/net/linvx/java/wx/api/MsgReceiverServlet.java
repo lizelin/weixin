@@ -15,8 +15,8 @@ import org.dom4j.Element;
 import net.linvx.java.libs.http.HttpUrl;
 import net.linvx.java.libs.tools.MyLog;
 import net.linvx.java.libs.utils.MyStringUtils;
-import net.linvx.java.wx.bo.BoOfficialAccount;
 import net.linvx.java.wx.common.DataProvider;
+import net.linvx.java.wx.po.PoOfficialAccount;
 
 /**
  * 接收微信服务器推送的消息的总入口
@@ -31,7 +31,7 @@ public class MsgReceiverServlet extends javax.servlet.http.HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		BoOfficialAccount account = DataProvider.getWxOfficialAccountByApiUrl(req.getRequestURI());
+		PoOfficialAccount account = DataProvider.getWxOfficialAccountByApiUrl(req.getRequestURI());
 		// 检查服务号配置信息
 		if (!ApiUtils.checkOfficialAccount(req, account))
 			return;

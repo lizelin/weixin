@@ -23,8 +23,9 @@ import net.linvx.java.libs.http.HttpHelper;
 import net.linvx.java.libs.http.HttpResponse;
 import net.linvx.java.libs.tools.MyLog;
 import net.linvx.java.libs.utils.MyStringUtils;
-import net.linvx.java.wx.bo.BoOfficialAccount;
+import net.linvx.java.libs.utils.MyWebUtils;
 import net.linvx.java.wx.common.Consts;
+import net.linvx.java.wx.po.PoOfficialAccount;
 import net.sf.json.JSONObject;
 
 /**
@@ -49,7 +50,7 @@ public class ApiUtils {
 	 * @param account
 	 * @return
 	 */
-	public static boolean checkOfficialAccount(HttpServletRequest req, BoOfficialAccount account) {
+	public static boolean checkOfficialAccount(HttpServletRequest req, PoOfficialAccount account) {
 		if (account == null) {
 			log.error("the request api uri [" + req.getRequestURI() + "] is not config in wx_official_account table");
 			return false;
@@ -108,45 +109,7 @@ public class ApiUtils {
 	 * @return
 	 */
 	public static String getRequestData(HttpServletRequest request) {
-		if (request.getMethod().equalsIgnoreCase("get"))
-			return "";
-		InputStream is = null;
-		String requestData = null;
-		try {
-			is = request.getInputStream();
-			// 取HTTP请求流长度
-			int size = request.getContentLength();
-			// 用于缓存每次读取的数据
-			byte[] buffer = new byte[size];
-			// 用于存放结果的数组
-			byte[] dataByte = new byte[size];
-			int count = 0;
-			int rbyte = 0;
-			// 循环读取
-			while (count < size) {
-				// 每次实际读取长度存于rbyte中
-				rbyte = is.read(buffer);
-				for (int i = 0; i < rbyte; i++) {
-					dataByte[count + i] = buffer[i];
-				}
-				count += rbyte;
-			}
-			requestData = new String(dataByte, Consts.DEFAULT_ENCODING);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			log.error(e);
-		} finally {
-			if (is != null) {
-				try {
-					is.close();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}
-		return requestData;
+		return MyWebUtils.getRequestData(request, Consts.DEFAULT_ENCODING);
 	}
 
 	/**
@@ -160,10 +123,11 @@ public class ApiUtils {
 		try {
 			doc = DocumentHelper.parseText(reqData);
 		} catch (DocumentException e) {
-			log.error("", e);
+			e.printStackTrace();
 			return null;
 		}
 		return doc.getRootElement();
+
 	}
 
 	/**
@@ -173,21 +137,7 @@ public class ApiUtils {
 	 * @param data
 	 */
 	public static void writeResp(HttpServletResponse response, String data) {
-		Writer writer = null;
-		try {
-			response.setCharacterEncoding("UTF-8");
-			writer = response.getWriter();
-			writer.write(data);
-		} catch (IOException e) {
-			log.error("", e);
-		} finally {
-			if (writer != null) {
-				try {
-					writer.close();
-				} catch (IOException e) {
-				}
-			}
-		}
+		MyWebUtils.writeResp(response, data, Consts.DEFAULT_ENCODING);
 	}
 
 	public static Element assertXml(String result) throws ApiException {

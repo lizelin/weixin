@@ -20,11 +20,11 @@ import net.linvx.java.libs.http.HttpUrl;
 import net.linvx.java.libs.tools.CommonAssistant;
 import net.linvx.java.libs.tools.MyLog;
 import net.linvx.java.libs.utils.MyStringUtils;
-import net.linvx.java.wx.bo.BoOfficialAccount;
 import net.linvx.java.wx.common.Consts;
 import net.linvx.java.wx.common.DataProvider;
 import net.linvx.java.wx.model.JsapiTicket;
 import net.linvx.java.wx.model.Token;
+import net.linvx.java.wx.po.PoOfficialAccount;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -39,9 +39,9 @@ public class WeixinApiImpl {
 	private String tokenFile = "";
 	private net.linvx.java.wx.model.JsapiTicket jsapiTicket = null;
 
-	private BoOfficialAccount account = null;
+	private PoOfficialAccount account = null;
 
-	public BoOfficialAccount getAccount() {
+	public PoOfficialAccount getAccount() {
 		return account;
 	}
 
@@ -50,7 +50,7 @@ public class WeixinApiImpl {
 	 */
 	private static Map<String, Token> tokens = new HashMap<String, Token>();
 
-	private WeixinApiImpl(BoOfficialAccount _account) {
+	private WeixinApiImpl(PoOfficialAccount _account) {
 		this.account = _account;
 		this.tokenFile = CommonAssistant.getResourceRootPath() + "/weixintoken_" + account.getNumAccountGuid() + ".txt";
 	}

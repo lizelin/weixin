@@ -1,9 +1,9 @@
-package net.linvx.java.wx.bo;
+package net.linvx.java.wx.po;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class BoReceivedMsg extends net.linvx.java.libs.enhance.BaseBean {
+public class PoReceivedMsg extends net.linvx.java.libs.enhance.BaseBean {
 	private java.lang.Integer numMsgGuid;
 	private java.lang.Integer numAccountGuid;
 	private java.lang.String vc2ToUserName;
@@ -22,7 +22,7 @@ public class BoReceivedMsg extends net.linvx.java.libs.enhance.BaseBean {
 		return numMsgGuid;
 	}
 
-	public BoReceivedMsg setNumMsgGuid(java.lang.Integer p) {
+	public PoReceivedMsg setNumMsgGuid(java.lang.Integer p) {
 		this.numMsgGuid = p;
 		return this;
 	}
@@ -31,7 +31,7 @@ public class BoReceivedMsg extends net.linvx.java.libs.enhance.BaseBean {
 		return numAccountGuid;
 	}
 
-	public BoReceivedMsg setNumAccountGuid(java.lang.Integer p) {
+	public PoReceivedMsg setNumAccountGuid(java.lang.Integer p) {
 		this.numAccountGuid = p;
 		return this;
 	}
@@ -40,7 +40,7 @@ public class BoReceivedMsg extends net.linvx.java.libs.enhance.BaseBean {
 		return vc2ToUserName;
 	}
 
-	public BoReceivedMsg setVc2ToUserName(java.lang.String p) {
+	public PoReceivedMsg setVc2ToUserName(java.lang.String p) {
 		this.vc2ToUserName = p;
 		return this;
 	}
@@ -49,7 +49,7 @@ public class BoReceivedMsg extends net.linvx.java.libs.enhance.BaseBean {
 		return vc2FromUserName;
 	}
 
-	public BoReceivedMsg setVc2FromUserName(java.lang.String p) {
+	public PoReceivedMsg setVc2FromUserName(java.lang.String p) {
 		this.vc2FromUserName = p;
 		return this;
 	}
@@ -58,7 +58,7 @@ public class BoReceivedMsg extends net.linvx.java.libs.enhance.BaseBean {
 		return numWxCreateTime;
 	}
 
-	public BoReceivedMsg setNumWxCreateTime(java.math.BigDecimal p) {
+	public PoReceivedMsg setNumWxCreateTime(java.math.BigDecimal p) {
 		this.numWxCreateTime = p;
 		return this;
 	}
@@ -67,7 +67,7 @@ public class BoReceivedMsg extends net.linvx.java.libs.enhance.BaseBean {
 		return vc2MsgType;
 	}
 
-	public BoReceivedMsg setVc2MsgType(java.lang.String p) {
+	public PoReceivedMsg setVc2MsgType(java.lang.String p) {
 		this.vc2MsgType = p;
 		return this;
 	}
@@ -76,7 +76,7 @@ public class BoReceivedMsg extends net.linvx.java.libs.enhance.BaseBean {
 		return datReceive;
 	}
 
-	public BoReceivedMsg setDatReceive(java.sql.Timestamp p) {
+	public PoReceivedMsg setDatReceive(java.sql.Timestamp p) {
 		this.datReceive = p;
 		return this;
 	}
@@ -85,7 +85,7 @@ public class BoReceivedMsg extends net.linvx.java.libs.enhance.BaseBean {
 		return vc2OriMsg;
 	}
 
-	public BoReceivedMsg setVc2OriMsg(java.lang.String p) {
+	public PoReceivedMsg setVc2OriMsg(java.lang.String p) {
 		this.vc2OriMsg = p;
 		return this;
 	}
@@ -94,7 +94,7 @@ public class BoReceivedMsg extends net.linvx.java.libs.enhance.BaseBean {
 		return datReply;
 	}
 
-	public BoReceivedMsg setDatReply(java.sql.Timestamp p) {
+	public PoReceivedMsg setDatReply(java.sql.Timestamp p) {
 		this.datReply = p;
 		return this;
 	}
@@ -103,7 +103,7 @@ public class BoReceivedMsg extends net.linvx.java.libs.enhance.BaseBean {
 		return vc2ReplyMsg;
 	}
 
-	public BoReceivedMsg setVc2ReplyMsg(java.lang.String p) {
+	public PoReceivedMsg setVc2ReplyMsg(java.lang.String p) {
 		this.vc2ReplyMsg = p;
 		return this;
 	}
@@ -112,20 +112,20 @@ public class BoReceivedMsg extends net.linvx.java.libs.enhance.BaseBean {
 		return vc2MsgId;
 	}
 
-	public BoReceivedMsg setVc2MsgId(java.lang.String p) {
+	public PoReceivedMsg setVc2MsgId(java.lang.String p) {
 		this.vc2MsgId = p;
 		return this;
 	}
 }
 
-// package net.linvx.java.wx.bo;
+// package net.linvx.java.wx.po;
 //
 // import java.util.HashMap;
 // import java.util.Map;
 //
 // import net.linvx.java.libs.enhance.BaseBean;
 //
-// public class BoReceivedMsg extends BaseBean{
+// public class PoReceivedMsg extends BaseBean{
 // public java.lang.Integer numMsgGuid;
 // public java.lang.Integer numAccountGuid;
 // public java.lang.String vc2ToUserName;

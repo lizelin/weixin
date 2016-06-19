@@ -14,10 +14,14 @@ import org.apache.log4j.Logger;
 
 import net.linvx.java.libs.db.MyDbUtils;
 import net.linvx.java.libs.tools.MyLog;
-import net.linvx.java.wx.bo.BoOfficialAccount;
-import net.linvx.java.wx.bo.BoReceivedMsg;
-import net.linvx.java.wx.bo.BoWeixinUser;
+import net.linvx.java.libs.utils.MyStringUtils;
+import net.linvx.java.wx.api.ApiException;
 import net.linvx.java.wx.model.Menu;
+import net.linvx.java.wx.po.PoOfficialAccount;
+import net.linvx.java.wx.po.PoReceivedMsg;
+import net.linvx.java.wx.po.PoWeixinUser;
+import net.linvx.java.wx.po.PoWxUserInfo;
+import net.linvx.java.wx.po.PoWxUserStatus;
 
 /**
  * 数据库所有操作类
@@ -34,18 +38,18 @@ public class DataProvider {
 	 * @param apiUrl
 	 * @return
 	 */
-	public static BoOfficialAccount getWxOfficialAccountByApiUrl(String apiUrl) {
-		BoOfficialAccount account = null;
+	public static PoOfficialAccount getWxOfficialAccountByApiUrl(String apiUrl) {
+		PoOfficialAccount account = null;
 		Connection db = null;
 		try {
 			db = DbHelper.getWxDb();
 			account = MyDbUtils.getRow(db, "select * from wx_official_account where vc2ApiUrl = ?",
-					new String[] { apiUrl }, BoOfficialAccount.class);
+					new String[] { apiUrl }, PoOfficialAccount.class);
 		} catch (Exception e) {
 			log.error("", e);
 			e.printStackTrace();
 		} finally {
-			MyDbUtils.closeConn(db);
+			MyDbUtils.closeQuietly(db);
 		}
 		return account;
 	}
@@ -56,18 +60,18 @@ public class DataProvider {
 	 * @param accountCode
 	 * @return
 	 */
-	public static BoOfficialAccount getWxOfficialAccountByAccountCode(String accountCode) {
-		BoOfficialAccount account = null;
+	public static PoOfficialAccount getWxOfficialAccountByAccountCode(String accountCode) {
+		PoOfficialAccount account = null;
 		Connection db = null;
 		try {
 			db = DbHelper.getWxDb();
 			account = MyDbUtils.getRow(db, "select * from wx_official_account where vc2AccountCode = ?",
-					new String[] { accountCode }, BoOfficialAccount.class);
+					new String[] { accountCode }, PoOfficialAccount.class);
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.error("", e);
 		} finally {
-			MyDbUtils.closeConn(db);
+			MyDbUtils.closeQuietly(db);
 		}
 		return account;
 	}
@@ -77,15 +81,15 @@ public class DataProvider {
 	 * 
 	 * @param msg
 	 */
-	public static void saveWxReceivedMsg(BoReceivedMsg msg) {
+	public static void saveWxReceivedMsg(PoReceivedMsg msg) {
 		Connection db = null;
 		StringBuffer sb = new StringBuffer();
-		String sqlSelect = "select numMsgGuid from wx_received_msg where vc2MsgId = ?";
+		String sqlSelect = "select numMsgGuid from wx_received_msg where vc2MsgId = ? and numAccountGuid = ?";
 		try {
 			db = DbHelper.getWxDb();
-			Integer msgGuid = MyDbUtils.getOne(db, sqlSelect, new String[] { msg.getVc2MsgId() });
+			Integer msgGuid = MyDbUtils.getOne(db, sqlSelect, new Object[] { msg.getVc2MsgId(), msg.getNumAccountGuid() });
 			if (msgGuid == null) {
-				sb.append("INSERT INTO `wx`.`wx_received_msg`");
+				sb.append("INSERT INTO `wx_received_msg`");
 				sb.append("	(`numAccountGuid`, `vc2ToUserName`, `vc2FromUserName`, `numWxCreateTime`,");
 				sb.append("  `vc2MsgType`, `datReceive`, `vc2OriMsg`,`datReply`, ");
 				sb.append("	 `vc2ReplyMsg`, `vc2MsgId`)");
@@ -99,15 +103,15 @@ public class DataProvider {
 								msg.getDatReply(), msg.getVc2ReplyMsg(), msg.getVc2MsgId() });
 				msg.setNumMsgGuid(msgGuid);
 			} else {
-				sb.append("update `wx`.`wx_received_msg`");
+				sb.append("update `wx_received_msg`");
 				sb.append("	set `numAccountGuid`=?, `vc2ToUserName`=?, `vc2FromUserName`=?, `numWxCreateTime`=?,");
 				sb.append("  `vc2MsgType`=?, `datReceive`=?, `vc2OriMsg`=?,`datReply`=?, ");
 				sb.append("	 `vc2ReplyMsg`=? ");
-				sb.append(" where vc2MsgId = ?");
+				sb.append(" where vc2MsgId = ? and numAccountGuid = ? ");
 				int rowcount = MyDbUtils.update(db, sb.toString(),
 						new Object[] { msg.getNumAccountGuid(), msg.getVc2ToUserName(), msg.getVc2FromUserName(),
 								msg.getNumWxCreateTime(), msg.getVc2MsgType(), msg.getDatReceive(), msg.getVc2OriMsg(),
-								msg.getDatReply(), msg.getVc2ReplyMsg(), msg.getVc2MsgId() });
+								msg.getDatReply(), msg.getVc2ReplyMsg(), msg.getVc2MsgId(), msg.getNumAccountGuid() });
 				if (rowcount <= 0) {
 					log.error("update wx_received_msg error: msgid is " + msg.getVc2MsgId());
 				}
@@ -116,32 +120,95 @@ public class DataProvider {
 			e.printStackTrace();
 			log.error("", e);
 		} finally {
-			MyDbUtils.closeConn(db);
+			MyDbUtils.closeQuietly(db);
 		}
 	}
 
 	/**
-	 * 获取用户Bo
+	 * 获取用户Po
 	 * 
 	 * @param numAccountGuid
 	 * @param openid
 	 * @return
 	 */
-	public static BoWeixinUser getWxUserByOpenId(int numAccountGuid, String openid) {
-		BoWeixinUser user = null;
+	public static PoWeixinUser getWxUserByOpenId(int numAccountGuid, String openid) {
+		PoWeixinUser user = null;
 		Connection db = null;
 		try {
 			db = DbHelper.getWxDb();
 			user = MyDbUtils.getRow(db, "select * from wx_user where vc2OpenId = ? and numAccountGuid=?",
-					new Object[] { openid, numAccountGuid }, BoWeixinUser.class);
+					new Object[] { openid, numAccountGuid }, PoWeixinUser.class);
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.error("", e);
 		} finally {
-			MyDbUtils.closeConn(db);
+			MyDbUtils.closeQuietly(db);
 		}
 		return user;
 	}
+	
+//	public static PoWxUserStatus saveWxUserStatus(PoWxUserStatus user) throws ApiException {
+//		if (user == null || MyStringUtils.isEmpty(user.getVc2OpenId()) || user.getNumAccountGuid() == null)
+//			throw new ApiException("user is null or user openid is null or user accountguid is null");
+//		PoWxUserStatus user1 = DataProvider.getWxUserStatusByOpenId(user.getNumAccountGuid(), user.getVc2OpenId());
+//		/*
+//		 *    numUserGuid          int(11) not null auto_increment comment '微信用户主键',
+//   numAccountGuid       int(11) not null comment '微信服务号主键',
+//   vc2OpenId            national varchar(64) not null comment '微信opened',
+//   vc2SubscribeFlag     national varchar(1) not null comment '关注标识：0，未关注；1，已关注',
+//   vc2FirstQRSceneId    national varchar(500) comment '首次关注来源qrscene，微信推送的格式为qrscene_***，该字段已经去掉了qrscene_，另外，该字段为首次关注来源',
+//   datFirstSubscribeTime datetime comment '关注时间',
+//   datLastSubscribeTime datetime,
+//   datLastUnSubscribeTime datetime,
+//   datCreation          datetime not null comment '创建时间',
+//   datLastUpdate        datetime not null comment '最后修改时间',
+//   vc2EnabledFlag       national varchar(1) not null comment '有效标识',
+//
+//		 * */
+//		String insert = "insert into wx_user_status(numAccountGuid, vc2OpenId, vc2SubscribeFlag, vc2FirstQRSceneId,"
+//				+ "datFirstSubscribeTime, datLastSubScribeTime, datLastUnSubscribeTime, datCreation,"
+//				+ "datLastUpdate, vc2EnabledFlag) values ("
+//				+ "?,?,?,?,"
+//				+ "?,?,?,?"
+//				+ "?,'?')";
+//		String update = "update wx_user_status set vc2SubscribeFlag=?, "
+//				+ "datLastSubScribeTime=?, "
+//				+ "datLastUpdate=?, vc2EnabledFlag) values ("
+//				+ "?,?,?,"
+//				+ "?,?,?,?"
+//				+ "?,'?')";
+//		if (user1 == null) {
+//			user1 = user;
+//		}
+//		return user;
+//	}
+//	
+//	/**
+//	 * 创建用户（注意，该函数未判断是否用户存在），最主要的是openid字段
+//	 * 
+//	 * @param user1
+//	 * @return
+//	 */
+//	public static int newWxUserStatus(PoWxUserStatus user1) {
+//		if (user1 == null)
+//			return -1;
+//		Connection db = null;
+//		String sql = "insert into wx_user_status(datCreation, datLastUpdate, numAccountGuid, vc2EnabledFlag,"
+//				+ "		vc2OpenId, vc2SubscribeFlag) values (" + "		?,?,?,?,?,?)";
+//		try {
+//			db = DbHelper.getWxDb();
+//			return MyDbUtils.insertReturnKey(db, sql,
+//					new Object[] { user1.getDatCreation(), user1.getDatLastUpdate(), user1.getNumAccountGuid(),
+//							user1.getVc2EnabledFlag(), user1.getVc2OpenId(), user1.getVc2SubscribeFlag() });
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			log.error("", e);
+//		} finally {
+//			MyDbUtils.closeQuietly(db);
+//		}
+//		return -1;
+//	}
+
 
 	/**
 	 * 创建用户（注意，该函数未判断是否用户存在），最主要的是openid字段
@@ -149,7 +216,7 @@ public class DataProvider {
 	 * @param user1
 	 * @return
 	 */
-	public static int newWxUser(BoWeixinUser user1) {
+	public static int newWxUser(PoWeixinUser user1) {
 		if (user1 == null)
 			return -1;
 		Connection db = null;
@@ -164,7 +231,7 @@ public class DataProvider {
 			e.printStackTrace();
 			log.error("", e);
 		} finally {
-			MyDbUtils.closeConn(db);
+			MyDbUtils.closeQuietly(db);
 		}
 		return -1;
 	}
@@ -174,7 +241,7 @@ public class DataProvider {
 	 * 
 	 * @param user
 	 */
-	public static void updateWxUser(BoWeixinUser user) {
+	public static void updateWxUser(PoWeixinUser user) {
 		if (user == null)
 			return;
 		Connection db = null;
@@ -196,7 +263,7 @@ public class DataProvider {
 			e.printStackTrace();
 			log.error("", e);
 		} finally {
-			MyDbUtils.closeConn(db);
+			MyDbUtils.closeQuietly(db);
 		}
 	}
 
@@ -220,7 +287,7 @@ public class DataProvider {
 			e.printStackTrace();
 			log.error("", e);
 		} finally {
-			MyDbUtils.closeConn(db);
+			MyDbUtils.closeQuietly(db);
 		}
 	}
 
@@ -229,7 +296,7 @@ public class DataProvider {
 	 * 
 	 * @param user
 	 */
-	public static void unsub(BoWeixinUser user) {
+	public static void unsub(PoWeixinUser user) {
 		if (user == null)
 			return;
 		Connection db = null;
@@ -244,7 +311,7 @@ public class DataProvider {
 			e.printStackTrace();
 			log.error("", e);
 		} finally {
-			MyDbUtils.closeConn(db);
+			MyDbUtils.closeQuietly(db);
 		}
 	}
 
@@ -299,7 +366,7 @@ public class DataProvider {
 			log.error("", e);
 			e.printStackTrace();
 		} finally {
-			MyDbUtils.closeConn(db);
+			MyDbUtils.closeQuietly(db);
 		}
 
 	}
@@ -322,7 +389,7 @@ public class DataProvider {
 		sb.append("    `numParentMenuGuid` ");
 		sb.append("	FROM `wx_menu`");
 		sb.append("	where vc2EnabledFlag = 'Y' and numAccountGuid = ? ");
-		sb.append("	and numParentMenuGuid = ?");
+		sb.append("	and numParentMenuGuid = ? order by numOrder, numMenuGuid");
 		Connection db = null;
 		try {
 			db = DbHelper.getWxDb();
@@ -359,7 +426,7 @@ public class DataProvider {
 			log.error("", e);
 			e.printStackTrace();
 		} finally {
-			MyDbUtils.closeConn(db);
+			MyDbUtils.closeQuietly(db);
 		}
 
 		return menus.toArray(new Menu[] {});

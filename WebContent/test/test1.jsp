@@ -5,6 +5,7 @@
 <%
 String A="test!";
 net.linvx.java.libs.tools.MyLog.getLogger(Object.class).error(A);
+
 /*Connection conn = MyDbHelper.getInstance().getConnection("wx");
 String A = conn.toString();
 conn.close();

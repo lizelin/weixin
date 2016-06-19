@@ -1,6 +1,6 @@
-package net.linvx.java.wx.bo;
+package net.linvx.java.wx.po;
 
-public class BoOfficialAccount extends net.linvx.java.libs.enhance.BaseBean {
+public class PoOfficialAccount extends net.linvx.java.libs.enhance.BaseBean {
 	private java.lang.Integer numAccountGuid;
 	private java.lang.String vc2AccountName;
 	private java.lang.String vc2AccountDesc;
@@ -19,7 +19,7 @@ public class BoOfficialAccount extends net.linvx.java.libs.enhance.BaseBean {
 		return numAccountGuid;
 	}
 
-	public BoOfficialAccount setNumAccountGuid(java.lang.Integer p) {
+	public PoOfficialAccount setNumAccountGuid(java.lang.Integer p) {
 		this.numAccountGuid = p;
 		return this;
 	}
@@ -28,7 +28,7 @@ public class BoOfficialAccount extends net.linvx.java.libs.enhance.BaseBean {
 		return vc2AccountName;
 	}
 
-	public BoOfficialAccount setVc2AccountName(java.lang.String p) {
+	public PoOfficialAccount setVc2AccountName(java.lang.String p) {
 		this.vc2AccountName = p;
 		return this;
 	}
@@ -37,7 +37,7 @@ public class BoOfficialAccount extends net.linvx.java.libs.enhance.BaseBean {
 		return vc2AccountDesc;
 	}
 
-	public BoOfficialAccount setVc2AccountDesc(java.lang.String p) {
+	public PoOfficialAccount setVc2AccountDesc(java.lang.String p) {
 		this.vc2AccountDesc = p;
 		return this;
 	}
@@ -46,7 +46,7 @@ public class BoOfficialAccount extends net.linvx.java.libs.enhance.BaseBean {
 		return vc2AppId;
 	}
 
-	public BoOfficialAccount setVc2AppId(java.lang.String p) {
+	public PoOfficialAccount setVc2AppId(java.lang.String p) {
 		this.vc2AppId = p;
 		return this;
 	}
@@ -55,7 +55,7 @@ public class BoOfficialAccount extends net.linvx.java.libs.enhance.BaseBean {
 		return vc2AppSecret;
 	}
 
-	public BoOfficialAccount setVc2AppSecret(java.lang.String p) {
+	public PoOfficialAccount setVc2AppSecret(java.lang.String p) {
 		this.vc2AppSecret = p;
 		return this;
 	}
@@ -64,7 +64,7 @@ public class BoOfficialAccount extends net.linvx.java.libs.enhance.BaseBean {
 		return vc2ApiUrl;
 	}
 
-	public BoOfficialAccount setVc2ApiUrl(java.lang.String p) {
+	public PoOfficialAccount setVc2ApiUrl(java.lang.String p) {
 		this.vc2ApiUrl = p;
 		return this;
 	}
@@ -73,7 +73,7 @@ public class BoOfficialAccount extends net.linvx.java.libs.enhance.BaseBean {
 		return vc2ApiToken;
 	}
 
-	public BoOfficialAccount setVc2ApiToken(java.lang.String p) {
+	public PoOfficialAccount setVc2ApiToken(java.lang.String p) {
 		this.vc2ApiToken = p;
 		return this;
 	}
@@ -82,7 +82,7 @@ public class BoOfficialAccount extends net.linvx.java.libs.enhance.BaseBean {
 		return vc2JsApiDomain;
 	}
 
-	public BoOfficialAccount setVc2JsApiDomain(java.lang.String p) {
+	public PoOfficialAccount setVc2JsApiDomain(java.lang.String p) {
 		this.vc2JsApiDomain = p;
 		return this;
 	}
@@ -91,7 +91,7 @@ public class BoOfficialAccount extends net.linvx.java.libs.enhance.BaseBean {
 		return vc2EnabledFlag;
 	}
 
-	public BoOfficialAccount setVc2EnabledFlag(java.lang.String p) {
+	public PoOfficialAccount setVc2EnabledFlag(java.lang.String p) {
 		this.vc2EnabledFlag = p;
 		return this;
 	}
@@ -100,7 +100,7 @@ public class BoOfficialAccount extends net.linvx.java.libs.enhance.BaseBean {
 		return vc2EncodingAESKey;
 	}
 
-	public BoOfficialAccount setVc2EncodingAESKey(java.lang.String p) {
+	public PoOfficialAccount setVc2EncodingAESKey(java.lang.String p) {
 		this.vc2EncodingAESKey = p;
 		return this;
 	}
@@ -109,7 +109,7 @@ public class BoOfficialAccount extends net.linvx.java.libs.enhance.BaseBean {
 		return datLastUpdate;
 	}
 
-	public BoOfficialAccount setDatLastUpdate(java.sql.Timestamp p) {
+	public PoOfficialAccount setDatLastUpdate(java.sql.Timestamp p) {
 		this.datLastUpdate = p;
 		return this;
 	}
@@ -118,7 +118,7 @@ public class BoOfficialAccount extends net.linvx.java.libs.enhance.BaseBean {
 		return vc2RouterUrl;
 	}
 
-	public BoOfficialAccount setVc2RouterUrl(java.lang.String p) {
+	public PoOfficialAccount setVc2RouterUrl(java.lang.String p) {
 		this.vc2RouterUrl = p;
 		return this;
 	}
@@ -127,28 +127,8 @@ public class BoOfficialAccount extends net.linvx.java.libs.enhance.BaseBean {
 		return vc2AccountCode;
 	}
 
-	public BoOfficialAccount setVc2AccountCode(java.lang.String p) {
+	public PoOfficialAccount setVc2AccountCode(java.lang.String p) {
 		this.vc2AccountCode = p;
 		return this;
 	}
 }
-
-// package net.linvx.java.wx.bo;
-//
-// import net.linvx.java.libs.enhance.BaseBean;
-//
-// public class BoOfficialAccount extends BaseBean {
-// public java.lang.Integer numAccountGuid;
-// public java.lang.String vc2AccountName;
-// public java.lang.String vc2AccountDesc;
-// public java.lang.String vc2AppId;
-// public java.lang.String vc2AppSecret;
-// public java.lang.String vc2ApiUrl;
-// public java.lang.String vc2ApiToken;
-// public java.lang.String vc2JsApiDomain;
-// public java.lang.String vc2EnabledFlag;
-// public java.lang.String vc2EncodingAESKey;
-// public java.sql.Timestamp datLastUpdate;
-// public java.lang.String vc2RouterUrl;
-// public java.lang.String vc2AccountCode;
-// }

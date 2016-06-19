@@ -8,7 +8,7 @@
     pageEncoding="UTF-8"%>
 <%
 	String openid = null, authdone = null, accountcode = null, code = null;
-	accountcode = MyStringUtils.nvlString(request.getParameter("accountCode"), "CODE");
+	accountcode = MyStringUtils.nvlString(request.getParameter("accountCode"), "zlli186");
 	
 	// 先看是否有openid：
 	openid = (String)request.getSession().getAttribute("openid");

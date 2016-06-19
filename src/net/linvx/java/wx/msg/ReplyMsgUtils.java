@@ -3,12 +3,12 @@ package net.linvx.java.wx.msg;
 import java.sql.Timestamp;
 
 import net.linvx.java.libs.utils.MyStringUtils;
-import net.linvx.java.wx.bo.BoOfficialAccount;
-import net.linvx.java.wx.bo.BoReceivedMsg;
+import net.linvx.java.wx.po.PoOfficialAccount;
+import net.linvx.java.wx.po.PoReceivedMsg;
 
 public class ReplyMsgUtils {
 
-	public static ReplyMsgBase createTextMsg(final BoOfficialAccount account, final BoReceivedMsg recvMsg,
+	public static ReplyMsgBase createTextMsg(final PoOfficialAccount account, final PoReceivedMsg recvMsg,
 			final String content) {
 		ReplyMsgBase replyMsg = new ReplyTextMsg(account.getNumAccountGuid(), recvMsg.getVc2ToUserName(),
 				recvMsg.getVc2FromUserName()).setContent(content);
@@ -17,7 +17,7 @@ public class ReplyMsgUtils {
 		return replyMsg;
 	}
 
-	public static ReplyMsgBase createWelcomeTextMsg(final BoOfficialAccount account, final BoReceivedMsg recvMsg) {
+	public static ReplyMsgBase createWelcomeTextMsg(final PoOfficialAccount account, final PoReceivedMsg recvMsg) {
 		// ReplyMsgBase replyMsg = new ReplyTextMsg(account.numAccountGuid,
 		// recvMsg.vc2ToUserName, recvMsg.vc2FromUserName)
 		// .setContent("Welcome to wx!");
@@ -31,27 +31,27 @@ public class ReplyMsgUtils {
 	 * @param msg
 	 * @return
 	 */
-	public static boolean isEventMsg(BoReceivedMsg msg) {
+	public static boolean isEventMsg(PoReceivedMsg msg) {
 		return MsgEnums.MsgType.event.name().equalsIgnoreCase(msg.getVc2MsgType());
 	}
 
-	public static boolean isSubscribeMsg(BoReceivedMsg msg) {
+	public static boolean isSubscribeMsg(PoReceivedMsg msg) {
 		return isEventMsg(msg) && MsgEnums.EventType.subscribe.name().equalsIgnoreCase(msg.attrs.get("Event"));
 	}
 
-	public static boolean isUnSubscribeMsg(BoReceivedMsg msg) {
+	public static boolean isUnSubscribeMsg(PoReceivedMsg msg) {
 		return isEventMsg(msg) && MsgEnums.EventType.unsubscribe.name().equalsIgnoreCase(msg.attrs.get("Event"));
 	}
 
-	public static boolean isSubscribeScanMsg(BoReceivedMsg msg) {
+	public static boolean isSubscribeScanMsg(PoReceivedMsg msg) {
 		return isSubscribeMsg(msg) && MyStringUtils.startWithIgnoreCase(msg.attrs.get("EventKey"), "qrscene_");
 	}
 
-	public static boolean isScanMsg(BoReceivedMsg msg) {
+	public static boolean isScanMsg(PoReceivedMsg msg) {
 		return isEventMsg(msg) && MsgEnums.EventType.SCAN.name().equalsIgnoreCase(msg.attrs.get("Event"));
 	}
 
-	public static boolean isNeedReply(BoReceivedMsg msg) {
+	public static boolean isNeedReply(PoReceivedMsg msg) {
 		return !ReplyMsgUtils.isEventMsg(msg) || (ReplyMsgUtils.isEventMsg(msg)
 				&& (MsgEnums.EventType.CLICK.name().equalsIgnoreCase(msg.attrs.get("Event"))
 						|| MsgEnums.EventType.SCAN.name().equalsIgnoreCase(msg.attrs.get("Event"))

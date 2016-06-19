@@ -19,10 +19,10 @@ import net.linvx.java.libs.tools.MyLog;
 import net.linvx.java.libs.utils.MyReflectUtils;
 import net.linvx.java.wx.api.ApiUtils;
 import net.linvx.java.wx.api.ProcessReceivedMsg;
-import net.linvx.java.wx.bo.BoOfficialAccount;
 import net.linvx.java.wx.common.DataProvider;
 import net.linvx.java.wx.common.DbHelper;
 import net.linvx.java.wx.msg.MsgEnums;
+import net.linvx.java.wx.po.PoOfficialAccount;
 import net.sf.json.JSONObject;
 
 public class WxTest {
@@ -41,8 +41,8 @@ public class WxTest {
 		String a = "";
 		try {
 			Connection db = DbHelper.getWxDb();
-			a = MyDbUtils.genBO(db, "wx_sub_or_unsub_log", "net.linvx.java.wx.bo", "BoSubOrUnsubLog");
-			MyDbUtils.closeConn(db);
+			a = MyDbUtils.genPO(db, "wx_sub_or_unsub_log", "net.linvx.java.wx.po", "BoSubOrUnsubLog");
+			MyDbUtils.closeQuietly(db);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -63,7 +63,7 @@ public class WxTest {
 		Connection conn = DriverManager.getConnection(
 				"jdbc:mysql://127.0.0.1:3306/wx?generateSimpleParameterMetadata=true", "wxuser", "Mynormal12#");
 		// 链接本地MYSQL
-		MyDbUtils.closeConn(conn);
+		MyDbUtils.closeQuietly(conn);
 		return "OK";
 	}
 
@@ -78,7 +78,7 @@ public class WxTest {
 
 	public static String test6(HttpServletRequest r) {
 		// 处理消息
-		BoOfficialAccount account = DataProvider.getWxOfficialAccountByApiUrl("/wxnew/api/r.do");
+		PoOfficialAccount account = DataProvider.getWxOfficialAccountByApiUrl("/wxnew/api/r.do");
 		StringBuffer sb = new StringBuffer();
 		sb.append("<xml>");
 		sb.append(" <ToUserName><![CDATA[toUser]]></ToUserName>");
@@ -105,13 +105,13 @@ public class WxTest {
 	}
 
 	public static String test7(HttpServletRequest r) {
-		BoOfficialAccount account = DataProvider.getWxOfficialAccountByAccountCode("CODE");
+		PoOfficialAccount account = DataProvider.getWxOfficialAccountByAccountCode("CODE");
 		System.out.println(MyReflectUtils.toJson(account, false, true));
 		return "";
 	}
 
 	public static String test8(HttpServletRequest r) {
-		BoOfficialAccount account = DataProvider.getWxOfficialAccountByAccountCode("CODE");
+		PoOfficialAccount account = DataProvider.getWxOfficialAccountByAccountCode("CODE");
 		System.out.println(JSONObject.fromObject(account).toString());
 		return "";
 	}

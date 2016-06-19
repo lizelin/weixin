@@ -1,6 +1,6 @@
-package net.linvx.java.wx.bo;
+package net.linvx.java.wx.po;
 
-public class BoWeixinUser extends net.linvx.java.libs.enhance.BaseBean {
+public class PoWeixinUser extends net.linvx.java.libs.enhance.BaseBean {
 	private java.lang.Integer numUserGuid;
 	private java.lang.Integer numAccountGuid;
 	private java.lang.String vc2OpenId;
@@ -28,7 +28,7 @@ public class BoWeixinUser extends net.linvx.java.libs.enhance.BaseBean {
 		return numUserGuid;
 	}
 
-	public BoWeixinUser setNumUserGuid(java.lang.Integer p) {
+	public PoWeixinUser setNumUserGuid(java.lang.Integer p) {
 		this.numUserGuid = p;
 		return this;
 	}
@@ -37,7 +37,7 @@ public class BoWeixinUser extends net.linvx.java.libs.enhance.BaseBean {
 		return numAccountGuid;
 	}
 
-	public BoWeixinUser setNumAccountGuid(java.lang.Integer p) {
+	public PoWeixinUser setNumAccountGuid(java.lang.Integer p) {
 		this.numAccountGuid = p;
 		return this;
 	}
@@ -46,7 +46,7 @@ public class BoWeixinUser extends net.linvx.java.libs.enhance.BaseBean {
 		return vc2OpenId;
 	}
 
-	public BoWeixinUser setVc2OpenId(java.lang.String p) {
+	public PoWeixinUser setVc2OpenId(java.lang.String p) {
 		this.vc2OpenId = p;
 		return this;
 	}
@@ -55,7 +55,7 @@ public class BoWeixinUser extends net.linvx.java.libs.enhance.BaseBean {
 		return vc2SubscribeFlag;
 	}
 
-	public BoWeixinUser setVc2SubscribeFlag(java.lang.String p) {
+	public PoWeixinUser setVc2SubscribeFlag(java.lang.String p) {
 		this.vc2SubscribeFlag = p;
 		return this;
 	}
@@ -64,7 +64,7 @@ public class BoWeixinUser extends net.linvx.java.libs.enhance.BaseBean {
 		return vc2FirstQRSceneId;
 	}
 
-	public BoWeixinUser setVc2FirstQRSceneId(java.lang.String p) {
+	public PoWeixinUser setVc2FirstQRSceneId(java.lang.String p) {
 		this.vc2FirstQRSceneId = p;
 		return this;
 	}
@@ -73,7 +73,7 @@ public class BoWeixinUser extends net.linvx.java.libs.enhance.BaseBean {
 		return vc2NickName;
 	}
 
-	public BoWeixinUser setVc2NickName(java.lang.String p) {
+	public PoWeixinUser setVc2NickName(java.lang.String p) {
 		this.vc2NickName = p;
 		return this;
 	}
@@ -82,7 +82,7 @@ public class BoWeixinUser extends net.linvx.java.libs.enhance.BaseBean {
 		return vc2SexCode;
 	}
 
-	public BoWeixinUser setVc2SexCode(java.lang.String p) {
+	public PoWeixinUser setVc2SexCode(java.lang.String p) {
 		this.vc2SexCode = p;
 		return this;
 	}
@@ -91,7 +91,7 @@ public class BoWeixinUser extends net.linvx.java.libs.enhance.BaseBean {
 		return vc2ProvinceName;
 	}
 
-	public BoWeixinUser setVc2ProvinceName(java.lang.String p) {
+	public PoWeixinUser setVc2ProvinceName(java.lang.String p) {
 		this.vc2ProvinceName = p;
 		return this;
 	}
@@ -100,7 +100,7 @@ public class BoWeixinUser extends net.linvx.java.libs.enhance.BaseBean {
 		return vc2CityName;
 	}
 
-	public BoWeixinUser setVc2CityName(java.lang.String p) {
+	public PoWeixinUser setVc2CityName(java.lang.String p) {
 		this.vc2CityName = p;
 		return this;
 	}
@@ -109,7 +109,7 @@ public class BoWeixinUser extends net.linvx.java.libs.enhance.BaseBean {
 		return vc2CountryName;
 	}
 
-	public BoWeixinUser setVc2CountryName(java.lang.String p) {
+	public PoWeixinUser setVc2CountryName(java.lang.String p) {
 		this.vc2CountryName = p;
 		return this;
 	}
@@ -118,7 +118,7 @@ public class BoWeixinUser extends net.linvx.java.libs.enhance.BaseBean {
 		return vc2Language;
 	}
 
-	public BoWeixinUser setVc2Language(java.lang.String p) {
+	public PoWeixinUser setVc2Language(java.lang.String p) {
 		this.vc2Language = p;
 		return this;
 	}
@@ -127,7 +127,7 @@ public class BoWeixinUser extends net.linvx.java.libs.enhance.BaseBean {
 		return vc2HeadImgUrl;
 	}
 
-	public BoWeixinUser setVc2HeadImgUrl(java.lang.String p) {
+	public PoWeixinUser setVc2HeadImgUrl(java.lang.String p) {
 		this.vc2HeadImgUrl = p;
 		return this;
 	}
@@ -136,7 +136,7 @@ public class BoWeixinUser extends net.linvx.java.libs.enhance.BaseBean {
 		return datFirstSubscribeTime;
 	}
 
-	public BoWeixinUser setDatFirstSubscribeTime(java.sql.Timestamp p) {
+	public PoWeixinUser setDatFirstSubscribeTime(java.sql.Timestamp p) {
 		this.datFirstSubscribeTime = p;
 		return this;
 	}
@@ -145,7 +145,7 @@ public class BoWeixinUser extends net.linvx.java.libs.enhance.BaseBean {
 		return vc2UnionId;
 	}
 
-	public BoWeixinUser setVc2UnionId(java.lang.String p) {
+	public PoWeixinUser setVc2UnionId(java.lang.String p) {
 		this.vc2UnionId = p;
 		return this;
 	}
@@ -154,7 +154,7 @@ public class BoWeixinUser extends net.linvx.java.libs.enhance.BaseBean {
 		return vc2Remark;
 	}
 
-	public BoWeixinUser setVc2Remark(java.lang.String p) {
+	public PoWeixinUser setVc2Remark(java.lang.String p) {
 		this.vc2Remark = p;
 		return this;
 	}
@@ -163,7 +163,7 @@ public class BoWeixinUser extends net.linvx.java.libs.enhance.BaseBean {
 		return vc2GroupId;
 	}
 
-	public BoWeixinUser setVc2GroupId(java.lang.String p) {
+	public PoWeixinUser setVc2GroupId(java.lang.String p) {
 		this.vc2GroupId = p;
 		return this;
 	}
@@ -172,7 +172,7 @@ public class BoWeixinUser extends net.linvx.java.libs.enhance.BaseBean {
 		return datCreation;
 	}
 
-	public BoWeixinUser setDatCreation(java.sql.Timestamp p) {
+	public PoWeixinUser setDatCreation(java.sql.Timestamp p) {
 		this.datCreation = p;
 		return this;
 	}
@@ -181,7 +181,7 @@ public class BoWeixinUser extends net.linvx.java.libs.enhance.BaseBean {
 		return datLastUpdate;
 	}
 
-	public BoWeixinUser setDatLastUpdate(java.sql.Timestamp p) {
+	public PoWeixinUser setDatLastUpdate(java.sql.Timestamp p) {
 		this.datLastUpdate = p;
 		return this;
 	}
@@ -190,7 +190,7 @@ public class BoWeixinUser extends net.linvx.java.libs.enhance.BaseBean {
 		return datLastSyncFromWx;
 	}
 
-	public BoWeixinUser setDatLastSyncFromWx(java.sql.Timestamp p) {
+	public PoWeixinUser setDatLastSyncFromWx(java.sql.Timestamp p) {
 		this.datLastSyncFromWx = p;
 		return this;
 	}
@@ -199,7 +199,7 @@ public class BoWeixinUser extends net.linvx.java.libs.enhance.BaseBean {
 		return vc2EnabledFlag;
 	}
 
-	public BoWeixinUser setVc2EnabledFlag(java.lang.String p) {
+	public PoWeixinUser setVc2EnabledFlag(java.lang.String p) {
 		this.vc2EnabledFlag = p;
 		return this;
 	}
@@ -208,7 +208,7 @@ public class BoWeixinUser extends net.linvx.java.libs.enhance.BaseBean {
 		return datLastUnSubscribeTime;
 	}
 
-	public BoWeixinUser setDatLastUnSubscribeTime(java.sql.Timestamp p) {
+	public PoWeixinUser setDatLastUnSubscribeTime(java.sql.Timestamp p) {
 		this.datLastUnSubscribeTime = p;
 		return this;
 	}
@@ -217,17 +217,17 @@ public class BoWeixinUser extends net.linvx.java.libs.enhance.BaseBean {
 		return datLastSubscribeTime;
 	}
 
-	public BoWeixinUser setDatLastSubscribeTime(java.sql.Timestamp p) {
+	public PoWeixinUser setDatLastSubscribeTime(java.sql.Timestamp p) {
 		this.datLastSubscribeTime = p;
 		return this;
 	}
 }
 
-// package net.linvx.java.wx.bo;
+// package net.linvx.java.wx.po;
 //
 // import net.linvx.java.libs.enhance.BaseBean;
 //
-// public class BoWeixinUser extends BaseBean{
+// public class PoWeixinUser extends BaseBean{
 // public java.lang.Integer numUserGuid;
 // public java.lang.Integer numAccountGuid;
 // public java.lang.String vc2OpenId;

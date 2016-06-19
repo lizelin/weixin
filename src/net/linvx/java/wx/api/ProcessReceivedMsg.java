@@ -7,11 +7,13 @@ import org.dom4j.Element;
 
 import net.linvx.java.libs.tools.MyLog;
 import net.linvx.java.libs.utils.MyStringUtils;
-import net.linvx.java.wx.bo.BoOfficialAccount;
-import net.linvx.java.wx.bo.BoReceivedMsg;
-import net.linvx.java.wx.bo.BoWeixinUser;
+import net.linvx.java.wx.common.CommonUtils;
 import net.linvx.java.wx.common.DataProvider;
 import net.linvx.java.wx.msg.ReplyMsgUtils;
+import net.linvx.java.wx.po.PoOfficialAccount;
+import net.linvx.java.wx.po.PoReceivedMsg;
+import net.linvx.java.wx.po.PoWeixinUser;
+import net.linvx.java.wx.po.PoWxUserStatus;
 import net.sf.json.JSONObject;
 
 /**
@@ -24,14 +26,14 @@ import net.sf.json.JSONObject;
  */
 public class ProcessReceivedMsg {
 	private static final Logger log = MyLog.getLogger(ProcessReceivedMsg.class);
-	protected BoOfficialAccount account = null;
+	protected PoOfficialAccount account = null;
 	protected Element rootElt = null;
-	protected BoReceivedMsg recvMsg = null;
+	protected PoReceivedMsg recvMsg = null;
 
-	public ProcessReceivedMsg(BoOfficialAccount _account, Element _rootElt) {
+	public ProcessReceivedMsg(PoOfficialAccount _account, Element _rootElt) {
 		this.rootElt = _rootElt;
 		this.account = _account;
-		recvMsg = BoProcessor.createReceivedMsgBo(account, rootElt);
+		recvMsg = BoProcessor.createReceivedMsgPo(account, rootElt);
 	}
 
 	public ProcessReceivedMsg process() throws ApiException {
@@ -75,7 +77,7 @@ public class ProcessReceivedMsg {
 	 * 处理取消关注消息
 	 */
 	private void processUnSubscribeMsg() {
-		BoWeixinUser user1 = DataProvider.getWxUserByOpenId(account.getNumAccountGuid(), recvMsg.getVc2FromUserName());
+		PoWeixinUser user1 = DataProvider.getWxUserByOpenId(account.getNumAccountGuid(), recvMsg.getVc2FromUserName());
 		boolean isNewUser = (user1 == null);
 		if (isNewUser) {
 			user1 = BoProcessor.createNewWxUserBo(account.getNumAccountGuid(), recvMsg.getVc2FromUserName());
@@ -90,10 +92,23 @@ public class ProcessReceivedMsg {
 	 * @throws ApiException
 	 */
 	private void processSubscribeMsg() throws ApiException {
-		BoWeixinUser user1 = DataProvider.getWxUserByOpenId(account.getNumAccountGuid(), recvMsg.getVc2FromUserName());
+		PoWeixinUser user1 = DataProvider.getWxUserByOpenId(account.getNumAccountGuid(), recvMsg.getVc2FromUserName());
 		boolean isNewUser = (user1 == null);
 		if (isNewUser) {
-			user1 = BoProcessor.createNewWxUserBo(account.getNumAccountGuid(), recvMsg.getVc2FromUserName());
+			String openId = recvMsg.getVc2FromUserName();
+			Timestamp now = CommonUtils.now();
+			user1 = new PoWeixinUser();
+			user1.setDatCreation(now)
+				.setDatFirstSubscribeTime(now)
+				.setDatLastSubscribeTime(now)
+				.setDatLastUnSubscribeTime(null)
+				.setDatLastUpdate(now)
+				.setNumAccountGuid(account.getNumAccountGuid())
+				.setNumUserGuid(0)
+				.setVc2EnabledFlag("Y")
+				.setVc2FirstQRSceneId(recvMsg.attrs.get("EventKey"))
+				.setVc2OpenId(openId)
+				.setVc2SubscribeFlag("1");
 			user1.setNumUserGuid(DataProvider.newWxUser(user1));
 		}
 		JSONObject json = WeixinApiImpl.createApiToWxByAccountCode(account.getVc2AccountCode())
@@ -104,7 +119,7 @@ public class ProcessReceivedMsg {
 		DataProvider.logUserSubOrUnSub(user1.getNumUserGuid(), "SUB", recvMsg.attrs.get("EventKey"));
 	}
 
-	public BoReceivedMsg getReceivedMsg() {
+	public PoReceivedMsg getReceivedMsg() {
 		return recvMsg;
 	}
 
